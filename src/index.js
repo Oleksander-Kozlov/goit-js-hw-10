@@ -1,88 +1,60 @@
 import './css/styles.css';
+// підключаю пакет lodash.debounce
 import debounce from 'lodash.debounce';
+// підключаю функцію для отримання даних з REST API
 import { fetchCountries } from './fetchCountries(name)';
+// підключаю функцію для створення розмітки
+import { createContainer } from "./createContainer"
+import { createList } from './createList';
+// підключаю бібліотеку notiflix
 import { Notify } from 'notiflix';
 const DEBOUNCE_DELAY = 300;
-
+// отримую доступ до HTML документів
 const enterCountry = document.querySelector('#search-box');
 const list = document.querySelector('.country-list');
 const divInfo = document.querySelector(".country-info")
-console.log(divInfo);
+
+// налаштовую інлайнові стилі
 list.style.listStyle = `none`;
 list.style.paddingLeft = `0`;
-enterCountry.style
 
-
+// прослуховувач на подію інпут з дебонсом в 300 мл
 enterCountry.addEventListener('input', debounce(onSearch, DEBOUNCE_DELAY));
+
 function onSearch(evt) {
-    console.log(evt.target.value)
-    if (!evt.target.value) {
+  
+  if (!evt.target.value.trim()) {
+    list.innerHTML = '';
+    divInfo.innerHTML = '';
+  }
+  
+  else {
+    fetchCountries(evt.target.value.trim())
+        .then(data => {
+          // Якщо у відповіді бекенд повернув більше ніж 10 країн
+          if (data.length > 10) {
+            return Notify.info(
+              'Too many matches found. Please enter a more specific name.'
+            );
+          }
+          // Якщо результат запиту - це масив з однією країною
+          if (data.length === 1) {
+            list.innerHTML = '';
+            return (divInfo.innerHTML = createContainer(data));
+          }
+          //   Якщо бекенд повернув від 2-х до 10-и країн
+          if ((2 <= data.length) & (data.length <= 10)) {
+            divInfo.innerHTML = '';
+            return (list.innerHTML = createList(data));
+          }
+        })
+      .catch(err => {
+        Notify.failure(err);
         list.innerHTML = '';
         divInfo.innerHTML = '';
-    }
-    else {
-        fetchCountries(evt.target.value.trim())
-            .then((data) => {
-            
-                if (data.length > 10) {
-                    return Notify.info(
-                        'Too many matches found. Please enter a more specific name.'
-                    );
-                
-                }
-                if (data.length === 1) {
-                    list.innerHTML = ''
-                    return divInfo.innerHTML = createMarkup(data);
-                    //   console.log(createMarkup(data));
-                }
-                if (2 <= data.length & data.length <= 10) {
-                    console.log(data);
-                    divInfo.innerHTML = '';
-                    return (list.innerHTML = createList(data));
-              
-                }
-            
-            })
-            .catch(err => {
-               
-                Notify.failure(err)
-                list.innerHTML = '';
-                divInfo.innerHTML = '';
-            });
-    }
+      });
+  }
 }
 
           
-function createList(arr) {
-    return arr
-      .map(
-        ({ flags: { svg, alt }, name: { official } }) =>
-          `<li><p><img src="${svg}" alt="${alt} width="35px" height="20px">  ${official}</p></li>`
-      )
-      .join('');
-    
-};
-   
 
-function createMarkup(arr) {
-    return arr
-      .map(
-        ({
-          flags: { svg, alt },
-          capital,
-          languages,
-          population,
-          name: { official }
-        }) =>
-          `<h2><img src="${svg}" alt="${alt} width="50px" height="30px">
-          <span> ${official}</span></h2>
-          <h3>Capital: <span style="font-weight: normal"> ${capital}</span></h3>
-          <h3>Population: <span style="font-weight: normal"> ${population}</span></h3>
-          <h3>Languages: <span style="font-weight: normal"  > ${Object.values(
-            languages
-          )}</span></h3>`
-      )
-      .join(' ');
-    
-}
-// {/*  */}

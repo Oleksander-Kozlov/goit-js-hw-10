@@ -7,10 +7,10 @@ function fetchCountries(name) {
   ).then(resp => {
     if (!resp.ok) {
       // throw new Error
-      list.innerHTML = ''
-      divInfo.innerHTML = ''
-      Notify.failure('Oops, there is no country with that name')
-         
+      
+      Notify.failure('Oops, there is no country with that name');
+      // list.innerHTML = '';
+      // divInfo.innerHTML = '';   
     }
     return resp.json();
   });
