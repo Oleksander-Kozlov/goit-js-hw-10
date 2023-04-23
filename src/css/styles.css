@@ -17,6 +17,9 @@ body {
   padding: 8px;
   max-width: 320px;
   margin-bottom: 16px;
+  transition: outline-color 250ms cubic-bezier(0.075, 0.82, 0.165, 1);
+}
+#search-box:hover, #search-box:focus{
+  outline-color: chartreuse;
   
 }
-
