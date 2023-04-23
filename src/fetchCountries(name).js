@@ -9,8 +9,8 @@ function fetchCountries(name) {
       // throw new Error
       
       Notify.failure('Oops, there is no country with that name');
-      // list.innerHTML = '';
-      // divInfo.innerHTML = '';   
+      list.innerHTML = '';
+      divInfo.innerHTML = '';   
     }
     return resp.json();
   });
