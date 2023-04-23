@@ -9,6 +9,8 @@ const list = document.querySelector('.country-list');
 const divInfo = document.querySelector(".country-info")
 console.log(divInfo);
 list.style.listStyle = `none`;
+list.style.paddingLeft = `0`;
+
 
 
 enterCountry.addEventListener('input', debounce(onSearch, DEBOUNCE_DELAY));
