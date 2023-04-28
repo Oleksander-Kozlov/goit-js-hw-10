@@ -14,7 +14,7 @@ function createContainer (arr) {
           <h3>Population: <span style="font-weight: normal"> ${population}</span></h3>
           <h3>Languages: <span style="font-weight: normal"  > ${Object.values(
             languages
-          )}</span></h3>`
+          ).join(", ")}</span></h3>`
     )
     .join(' ');
 }

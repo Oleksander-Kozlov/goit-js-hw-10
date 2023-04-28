@@ -30,7 +30,8 @@ function onSearch(evt) {
   
   else {
     fetchCountries(evt.target.value.trim())
-        .then(data => {
+      .then(data => {
+          console.log(data);
           // Якщо у відповіді бекенд повернув більше ніж 10 країн
           if (data.length > 10) {
             return Notify.info(
@@ -47,11 +48,19 @@ function onSearch(evt) {
             divInfo.innerHTML = '';
             return (list.innerHTML = createList(data));
           }
+          // if (data.status === 404) {
+          //    Notify.failure('Oops, there is no country with that name');
+          // }
         })
       .catch(err => {
-        Notify.failure(err);
-        list.innerHTML = '';
-        divInfo.innerHTML = '';
+        
+        if (Error.status = 404) {
+          Notify.failure('Oops, there is no country with that name');
+        } else {
+          Notify.failure(`${Error.message}`);
+          list.innerHTML = '';
+          divInfo.innerHTML = '';
+        }
       });
   }
 }

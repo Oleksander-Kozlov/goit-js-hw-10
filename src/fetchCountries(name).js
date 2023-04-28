@@ -6,11 +6,10 @@ function fetchCountries(name) {
     `${BASE_URL}/name/${name}?fields=capital&fields=population&fields=languages&fields=flags&fields=name`
   ).then(resp => {
     if (!resp.ok) {
-      // throw new Error
+      throw new Error 
       
-      Notify.failure('Oops, there is no country with that name');
-      list.innerHTML = '';
-      divInfo.innerHTML = '';   
+      
+       
     }
     return resp.json();
   });
